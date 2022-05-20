@@ -96,7 +96,42 @@ def merge_sort(items):
     return _merge_sort(items, comp=lambda x, y: x < y)
 
 
+"""
+快速排序 
+通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，
+然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。
+核心思想:
+1.在待排序的元素任取一个元素作为基准(通常选第一个元素，称为基准元素）
+2.将待排序的元素进行分块，比基准元素大的元素移动到基准元素的右侧，比基准元素小的移动到作左侧，从而一趟排序过程，就可以锁定基准元素的最终位置
+3.对左右两个分块重复以上步骤直到所有元素都是有序的（递归过程）
+"""
+def quick_sort(items, comp=lambda x, y: x <= y):
+    items = list(items)[:]
+    _quick_sort(items, 0, len(items) - 1, comp)
+    return items
+
+
+def _quick_sort(items, start, end, comp):
+    if start < end:
+        pos = _partition(items, start, end, comp)
+        print(pos,items)
+        _quick_sort(items, start, pos - 1, comp)
+        _quick_sort(items, pos + 1, end, comp)
+
+
+def _partition(items, start, end, comp):
+    """完成：将待排序的元素进行分块，比基准元素大的元素移动到基准元素的右侧，比基准元素小的移动到作左侧"""
+    pivot = items[end] # 选择枢轴对元素进行划分，左边都比枢轴小，右边都比枢轴大
+    i = start - 1
+    for j in range(start, end):
+        if comp(items[j], pivot):
+            i += 1
+            items[i], items[j] = items[j], items[i]
+    items[i + 1], items[end] = items[end], items[i + 1]
+    return i + 1
+
 if __name__ == '__main__':
     a = [1, 2, 10, 4, 3, 7, 6, 9, 8]
-    r = merge_sort(a)
+    #r = merge_sort(a)
+    r = quick_sort(a)
     print(r)
